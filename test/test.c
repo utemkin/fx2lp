@@ -48,17 +48,32 @@ void delay(WORD millis)
     }
 }
 
+void timer0_isr() __interrupt TF0_ISR
+{
+    PA0^=1;
+}
+
 void main()
 {
     SETCPUFREQ(CLK_48M);
+
+    CKCON|=bmBIT3;            //T0M=1 (use CLKOUT/4 as TIMER0 clock)
+    TMOD=(TMOD&0xf)|bmBIT1;   //TIMER0 mode 2
+    TH0=256-208;              //TIMER0 reload register
+    TL0=TH0;                  //TIMER0 initial counter
+    TR0=1;                    //enable TIMER0 counting
+    ENABLE_TIMER0();
+    EA=1;                     //enable interrupts
+
     OEA|=bmBIT0;
+
     for(;;)
     {
-        PA0=1;
+//        PA0=1;
 //        delay(1);	//889us
-        delay(1);
-        PA0=0;
 //        delay(1);
-        delay(1);
+//        PA0=0;
+//        delay(1);
+//        delay(1);
     }
 }
