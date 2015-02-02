@@ -5,6 +5,7 @@
 *.adb
 *.cdb
 *.ihx
+*.hex
 *.bix
 *.rst
 *.mem
