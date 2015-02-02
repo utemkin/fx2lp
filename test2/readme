@@ -1,0 +1,5 @@
+1.
+For the first .rel in link order (and it should not contain main()) put the table at HOME.
+This will put the table at location 0x0000 of binary
+
+2.

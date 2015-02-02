@@ -389,4 +389,61 @@ DECLARE_XSFR_ARRAY(EP4FIFOBUF,0xf400,1024);
 DECLARE_XSFR_ARRAY(EP6FIFOBUF,0xf800,1024);
 DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
 
+#if defined(USE_SUDAV_ISR)||\
+    defined(USE_SOF_ISR)||\
+    defined(USE_SUTOK_ISR)||\
+    defined(USE_SUSPEND_ISR)||\
+    defined(USE_USBRESET_ISR)||\
+    defined(USE_HISPEED_ISR)||\
+    defined(USE_EP0ACK_ISR)||\
+    defined(USE_EP0IN_ISR)||\
+    defined(USE_EP0OUT_ISR)||\
+    defined(USE_EP1IN_ISR)||\
+    defined(USE_EP1OUT_ISR)||\
+    defined(USE_EP2_ISR)||\
+    defined(USE_EP4_ISR)||\
+    defined(USE_EP6_ISR)||\
+    defined(USE_EP8_ISR)||\
+    defined(USE_IBN_ISR)||\
+    defined(USE_EP0PING_ISR)||\
+    defined(USE_EP1PING_ISR)||\
+    defined(USE_EP2PING_ISR)||\
+    defined(USE_EP4PING_ISR)||\
+    defined(USE_EP6PING_ISR)||\
+    defined(USE_EP8PING_ISR)||\
+    defined(USE_ERRLIMIT_ISR)||\
+    defined(USE_EP2ISOERR_ISR)||\
+    defined(USE_EP2ISOERR_ISR)||\
+    defined(USE_EP2ISOERR_ISR)||\
+    defined(USE_EP2ISOERR_ISR)
+#define USE_INT2AV
+#endif
+
+#if defined(USE_EP2PF_ISR)||\
+    defined(USE_EP4PF_ISR)||\
+    defined(USE_EP6PF_ISR)||\
+    defined(USE_EP8PF_ISR)||\
+    defined(USE_EP2EF_ISR)||\
+    defined(USE_EP4EF_ISR)||\
+    defined(USE_EP6EF_ISR)||\
+    defined(USE_EP8EF_ISR)||\
+    defined(USE_EP2FF_ISR)||\
+    defined(USE_EP4FF_ISR)||\
+    defined(USE_EP6FF_ISR)||\
+    defined(USE_EP8FF_ISR)||\
+    defined(USE_GPIFDONE_ISR)||\
+    defined(USE_GPIFWF_ISR)
+#define USE_INT4AV
+#endif
+
+#pragma noiv
+
+#if defined(USE_INT2AV)&&!defined(COMPILE_FX2LP)
+DECLARE_ISR(INT2AV_ISR,8);
+#endif
+
+#if defined(USE_INT4AV)&&!defined(COMPILE_FX2LP)
+DECLARE_ISR(INT4AV_ISR,10);
+#endif
+
 #endif

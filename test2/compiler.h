@@ -20,9 +20,11 @@
 #define PDATA __pdata
 #define CODE __code
 #define DECLARE_SFR(name,addr) __sfr __at(addr) name
-#define DECLARE_SFR_BIT(name,addr,bit) __sbit __at(addr+bit) name
+#define DECLARE_SFR_BIT(name,addr,bit) __sbit __at((addr)+(bit)) name
 #define DECLARE_XSFR(name,addr) __xdata volatile BYTE __at(addr) name
 #define DECLARE_XSFR_ARRAY(name,addr,cnt) __xdata volatile BYTE __at(addr) name[cnt]
+#define DECLARE_ISR(name,num) extern void name() __interrupt(num)
+#define IMPLEMENT_ISR(name,num) void name()
 #endif
 
 #endif
