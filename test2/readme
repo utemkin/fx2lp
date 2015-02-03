@@ -1,5 +1,1 @@
-1.
-For the first .rel in link order (and it should not contain main()) put the table at HOME.
-This will put the table at location 0x0000 of binary
-
-2.
+- try to use INT2CLR/INT4CLR instead of individual bits
