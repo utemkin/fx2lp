@@ -33,6 +33,12 @@
     #define IDATA __idata
     #define PDATA __pdata
     #define CODE __code
+    #define STRINGIFY(s) #s
+    #define ATOMIC_INC(direct)      __asm__("inc _" STRINGIFY(direct) "\n") 
+    #define ATOMIC_DEC(direct)      __asm__("dec _" STRINGIFY(direct) "\n") 
+    #define ATOMIC_AND(direct,data) __asm__("anl _" STRINGIFY(direct) ",#" STRINGIFY(data) "\n") 
+    #define ATOMIC_OR(direct,data)  __asm__("orl _" STRINGIFY(direct) ",#" STRINGIFY(data) "\n") 
+    #define ATOMIC_XOR(direct,data) __asm__("xrl _" STRINGIFY(direct) ",#" STRINGIFY(data) "\n") 
     #define DECLARE_SFR(name,addr) __sfr __at(addr) name
     #define DECLARE_SFR_BIT(name,addr,bit) __sbit __at((addr)+(bit)) name
     #define DECLARE_XSFR(name,addr) __xdata volatile BYTE __at(addr) name
@@ -46,7 +52,7 @@
                                     ".globl _ivect_table\n"            \
                                     "_ivect_table:\n"                  \
                                     "ljmp ivect_table_end\n");
-    #define IVT_ISR(name)   __asm__("ljmp _" #name "\n"                \
+    #define IVT_ISR(name)   __asm__("ljmp _" STRINGIFY(name) "\n"      \
                                     ".ds 5\n");
     #define IVT_AV4          __asm__("ljmp ivect_table4\n"             \
                                     ".ds 5\n");
@@ -58,14 +64,14 @@
                         }
     #define IVT4_START      __asm__(".=_ivect_table+0x80\n"            \
                                     "ivect_table4:\n");
-    #define IVT4_ISR(name)  __asm__("ljmp _" #name "\n"                \
+    #define IVT4_ISR(name)  __asm__("ljmp _" STRINGIFY(name) "\n"      \
                                     ".ds 1\n");
     #define IVT4_NOISR      __asm__("reti\n"                           \
                                     ".ds 3\n");
     #define IVT4_END
     #define IVT2_START      __asm__(".=_ivect_table+0x100\n"           \
                                     "ivect_table2:\n");
-    #define IVT2_ISR(name)  __asm__("ljmp _" #name "\n"                \
+    #define IVT2_ISR(name)  __asm__("ljmp _" STRINGIFY(name) "\n"      \
                                     ".ds 1\n");
     #define IVT2_NOISR      __asm__("reti\n"                           \
                                     ".ds 3\n");
