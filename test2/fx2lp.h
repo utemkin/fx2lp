@@ -389,155 +389,195 @@ DECLARE_XSFR_ARRAY(EP4FIFOBUF,0xf400,1024);
 DECLARE_XSFR_ARRAY(EP6FIFOBUF,0xf800,1024);
 DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
 
-#ifndef NO_AUTOVECTOR
+#if defined(USE_SUDAV_ISR)||\
+  defined(USE_SOF_ISR)||\
+  defined(USE_SUTOK_ISR)||\
+  defined(USE_SUSPEND_ISR)||\
+  defined(USE_USBRESET_ISR)||\
+  defined(USE_HISPEED_ISR)||\
+  defined(USE_EP0ACK_ISR)||\
+  defined(USE_EP0IN_ISR)||\
+  defined(USE_EP0OUT_ISR)||\
+  defined(USE_EP1IN_ISR)||\
+  defined(USE_EP1OUT_ISR)||\
+  defined(USE_EP2_ISR)||\
+  defined(USE_EP4_ISR)||\
+  defined(USE_EP6_ISR)||\
+  defined(USE_EP8_ISR)||\
+  defined(USE_IBN_ISR)||\
+  defined(USE_EP0PING_ISR)||\
+  defined(USE_EP1PING_ISR)||\
+  defined(USE_EP2PING_ISR)||\
+  defined(USE_EP4PING_ISR)||\
+  defined(USE_EP6PING_ISR)||\
+  defined(USE_EP8PING_ISR)||\
+  defined(USE_ERRLIMIT_ISR)||\
+  defined(USE_EP2ISOERR_ISR)||\
+  defined(USE_EP4ISOERR_ISR)||\
+  defined(USE_EP6ISOERR_ISR)||\
+  defined(USE_EP8ISOERR_ISR)
+    #define USE_INT2AV
+#endif
 
-    #if defined(USE_SUDAV_ISR)||\
-      defined(USE_SOF_ISR)||\
-      defined(USE_SUTOK_ISR)||\
-      defined(USE_SUSPEND_ISR)||\
-      defined(USE_USBRESET_ISR)||\
-      defined(USE_HISPEED_ISR)||\
-      defined(USE_EP0ACK_ISR)||\
-      defined(USE_EP0IN_ISR)||\
-      defined(USE_EP0OUT_ISR)||\
-      defined(USE_EP1IN_ISR)||\
-      defined(USE_EP1OUT_ISR)||\
-      defined(USE_EP2_ISR)||\
-      defined(USE_EP4_ISR)||\
-      defined(USE_EP6_ISR)||\
-      defined(USE_EP8_ISR)||\
-      defined(USE_IBN_ISR)||\
-      defined(USE_EP0PING_ISR)||\
-      defined(USE_EP1PING_ISR)||\
-      defined(USE_EP2PING_ISR)||\
-      defined(USE_EP4PING_ISR)||\
-      defined(USE_EP6PING_ISR)||\
-      defined(USE_EP8PING_ISR)||\
-      defined(USE_ERRLIMIT_ISR)||\
-      defined(USE_EP2ISOERR_ISR)||\
-      defined(USE_EP2ISOERR_ISR)||\
-      defined(USE_EP2ISOERR_ISR)||\
-      defined(USE_EP2ISOERR_ISR)
-        #define USE_INT2AV
-    #endif
-
-    #if defined(USE_EP2PF_ISR)||\
-      defined(USE_EP4PF_ISR)||\
-      defined(USE_EP6PF_ISR)||\
-      defined(USE_EP8PF_ISR)||\
-      defined(USE_EP2EF_ISR)||\
-      defined(USE_EP4EF_ISR)||\
-      defined(USE_EP6EF_ISR)||\
-      defined(USE_EP8EF_ISR)||\
-      defined(USE_EP2FF_ISR)||\
-      defined(USE_EP4FF_ISR)||\
-      defined(USE_EP6FF_ISR)||\
-      defined(USE_EP8FF_ISR)||\
-      defined(USE_GPIFDONE_ISR)||\
-      defined(USE_GPIFWF_ISR)
-        #define USE_INT4AV
-    #endif
-
+#if defined(USE_EP2PF_ISR)||\
+  defined(USE_EP4PF_ISR)||\
+  defined(USE_EP6PF_ISR)||\
+  defined(USE_EP8PF_ISR)||\
+  defined(USE_EP2EF_ISR)||\
+  defined(USE_EP4EF_ISR)||\
+  defined(USE_EP6EF_ISR)||\
+  defined(USE_EP8EF_ISR)||\
+  defined(USE_EP2FF_ISR)||\
+  defined(USE_EP4FF_ISR)||\
+  defined(USE_EP6FF_ISR)||\
+  defined(USE_EP8FF_ISR)||\
+  defined(USE_GPIFDONE_ISR)||\
+  defined(USE_GPIFWF_ISR)
+    #define USE_INT4AV
 #endif
 
 #if defined(USE_INT4_ISR)&&defined(USE_INT4AV)
-    #error USE_INT4_ISR cannot be defined while INT4 autovector enabled
+    #error USE_INT4_ISR cannot be defined while any of INT4AV interrupts used
 #endif
 
 #ifdef USE_INT0_ISR
     DECLARE_ISR(INT0_ISR);
-    #define IMPLEMENT_INT0_ISR IMPLEMENT_ISR(INT0_ISR)
-    #define ENABLE_INT0_ISR  do{EX0=1;}while(0)
-    #define DISABLE_INT0_ISR do{EX0=0;}while(0)
-    #define ACK_INT0_ISR     do{}while(0)
+    #define IMPLEMENT_INT0_ISR     IMPLEMENT_ISR(INT0_ISR)
+    #define SET_PRIO_HIGH_INT0_ISR do{PX0=1;}while(0)
+    #define SET_PRIO_LOW_INT0_ISR  do{PX0=0;}while(0)
+    #define ENABLE_INT0_ISR        do{EX0=1;}while(0)
+    #define DISABLE_INT0_ISR       do{EX0=0;}while(0)
+    #define ACK_INT0_ISR           do{}while(0)
 #endif
 
 #ifdef USE_TIMER0_ISR
     DECLARE_ISR(TIMER0_ISR);
-    #define IMPLEMENT_TIMER0_ISR IMPLEMENT_ISR(TIMER0_ISR)
-    #define ENABLE_TIMER0_ISR  do{ET0=1;}while(0)
-    #define DISABLE_TIMER0_ISR do{ET0=0;}while(0)
-    #define ACK_TIMER0_ISR     do{}while(0)
+    #define IMPLEMENT_TIMER0_ISR     IMPLEMENT_ISR(TIMER0_ISR)
+    #define SET_PRIO_HIGH_TIMER0_ISR do{PT0=1;}while(0)
+    #define SET_PRIO_LOW_TIMER0_ISR  do{PT0=0;}while(0)
+    #define ENABLE_TIMER0_ISR        do{ET0=1;}while(0)
+    #define DISABLE_TIMER0_ISR       do{ET0=0;}while(0)
+    #define ACK_TIMER0_ISR           do{}while(0)
 #endif
 
 #ifdef USE_INT1_ISR
     DECLARE_ISR(INT1_ISR);
-    #define IMPLEMENT_INT1_ISR IMPLEMENT_ISR(INT1_ISR)
-    #define ENABLE_INT1_ISR  do{EX1=1;}while(0)
-    #define DISABLE_INT1_ISR do{EX1=0;}while(0)
-    #define ACK_INT1_ISR     do{}while(0)
+    #define IMPLEMENT_INT1_ISR     IMPLEMENT_ISR(INT1_ISR)
+    #define SET_PRIO_HIGH_INT1_ISR do{PX1=1;}while(0)
+    #define SET_PRIO_LOW_INT1_ISR  do{PX1=0;}while(0)
+    #define ENABLE_INT1_ISR        do{EX1=1;}while(0)
+    #define DISABLE_INT1_ISR       do{EX1=0;}while(0)
+    #define ACK_INT1_ISR           do{}while(0)
 #endif
 
 #ifdef USE_TIMER1_ISR
     DECLARE_ISR(TIMER1_ISR);
-    #define IMPLEMENT_TIMER1_ISR IMPLEMENT_ISR(TIMER1_ISR)
-    #define ENABLE_TIMER1_ISR  do{ET1=1;}while(0)
-    #define DISABLE_TIMER1_ISR do{ET1=0;}while(0)
-    #define ACK_TIMER1_ISR     do{}while(0)
+    #define IMPLEMENT_TIMER1_ISR     IMPLEMENT_ISR(TIMER1_ISR)
+    #define SET_PRIO_HIGH_TIMER1_ISR do{PT1=1;}while(0)
+    #define SET_PRIO_LOW_TIMER1_ISR  do{PT1=0;}while(0)
+    #define ENABLE_TIMER1_ISR        do{ET1=1;}while(0)
+    #define DISABLE_TIMER1_ISR       do{ET1=0;}while(0)
+    #define ACK_TIMER1_ISR           do{}while(0)
 #endif
 
 #ifdef USE_USART0_ISR
     DECLARE_ISR(USART0_ISR);
-    #define IMPLEMENT_USART0_ISR IMPLEMENT_ISR(USART0_ISR)
-    #define ENABLE_USART0_ISR  do{ES0=1;}while(0)
-    #define DISABLE_USART0_ISR do{ES0=0;}while(0)
-    #define ACK_USART0_ISR     do{TI_0=0;RI_0=0;}while(0)
+    #define IMPLEMENT_USART0_ISR     IMPLEMENT_ISR(USART0_ISR)
+    #define SET_PRIO_HIGH_USART0_ISR do{PS0=1;}while(0)
+    #define SET_PRIO_LOW_USART0_ISR  do{PS0=0;}while(0)
+    #define ENABLE_USART0_ISR        do{ES0=1;}while(0)
+    #define DISABLE_USART0_ISR       do{ES0=0;}while(0)
+    #define ACK_USART0_ISR           do{TI_0=0;RI_0=0;}while(0)
 #endif
 
 #ifdef USE_TIMER2_ISR
     DECLARE_ISR(TIMER2_ISR);
-    #define IMPLEMENT_TIMER2_ISR IMPLEMENT_ISR(TIMER2_ISR)
-    #define ENABLE_TIMER2_ISR  do{ET2=1;}while(0)
-    #define DISABLE_TIMER2_ISR do{ET2=0;}while(0)
-    #define ACK_TIMER2_ISR     do{TF2=0;EXF2=0;}while(0)
+    #define IMPLEMENT_TIMER2_ISR     IMPLEMENT_ISR(TIMER2_ISR)
+    #define SET_PRIO_HIGH_TIMER2_ISR do{PT2=1;}while(0)
+    #define SET_PRIO_LOW_TIMER2_ISR  do{PT2=0;}while(0)
+    #define ENABLE_TIMER2_ISR        do{ET2=1;}while(0)
+    #define DISABLE_TIMER2_ISR       do{ET2=0;}while(0)
+    #define ACK_TIMER2_ISR           do{TF2=0;EXF2=0;}while(0)
 #endif
 
 #ifdef USE_WAKEUP_ISR
     DECLARE_ISR(WAKEUP_ISR);
     #define IMPLEMENT_WAKEUP_ISR IMPLEMENT_ISR(WAKEUP_ISR)
-    #define ENABLE_WAKEUP_ISR  do{ERESI=1;}while(0)
-    #define DISABLE_WAKEUP_ISR do{ERESI=0;}while(0)
-    #define ACK_WAKEUP_ISR     do{RESI=0;}while(0)
+    #define ENABLE_WAKEUP_ISR    do{ERESI=1;}while(0)
+    #define DISABLE_WAKEUP_ISR   do{ERESI=0;}while(0)
+    #define ACK_WAKEUP_ISR       do{RESI=0;}while(0)
 #endif
 
 #ifdef USE_USART1_ISR
     DECLARE_ISR(USART1_ISR);
-    #define IMPLEMENT_USART1_ISR IMPLEMENT_ISR(USART1_ISR)
-    #define ENABLE_USART1_ISR  do{ES1=1;}while(0)
-    #define DISABLE_USART1_ISR do{ES1=0;}while(0)
-    #define ACK_USART1_ISR     do{TI_1=0;RI_1=0;}while(0)
+    #define IMPLEMENT_USART1_ISR     IMPLEMENT_ISR(USART1_ISR)
+    #define SET_PRIO_HIGH_USART1_ISR do{PS1=1;}while(0)
+    #define SET_PRIO_LOW_USART1_ISR  do{PS1=0;}while(0)
+    #define ENABLE_USART1_ISR        do{ES1=1;}while(0)
+    #define DISABLE_USART1_ISR       do{ES1=0;}while(0)
+    #define ACK_USART1_ISR           do{TI_1=0;RI_1=0;}while(0)
+#endif
+
+#ifdef USE_INT2AV
+    #define SETUP_INT2AV         do{INTSETUP|=BIT3;}while(0)
+    #define SET_PRIO_HIGH_INT2AV do{PUSB=1;}while(0)
+    #define SET_PRIO_LOW_INT2AV  do{PUSB=0;}while(0)
+    #define ENABLE_INT2AV        do{EUSB=1;}while(0)
+    #define DISABLE_INT2AV       do{EUSB=0;}while(0)
+    #define ACK_INT2AV_ANY       do{ATOMIC_AND(EXIF,~BIT4);INT2CLR=0;}while(0)
+    #define ACK_INT2AV(reg,bit)  do{ATOMIC_AND(EXIF,~BIT4);reg=bit;}while(0)
+//    #define ACK_INT2AV(reg,bit)  ACK_INT2AV_ANY
 #endif
 
 #ifdef USE_I2C_ISR
     DECLARE_ISR(I2C_ISR);
-    #define IMPLEMENT_I2C_ISR IMPLEMENT_ISR(I2C_ISR)
-    #define ENABLE_I2C_ISR  do{EI2C=1;}while(0)
-    #define DISABLE_I2C_ISR do{EI2C=0;}while(0)
-    #define ACK_I2C_ISR     do{EXIF&=~BIT5;}while(0)
+    #define IMPLEMENT_I2C_ISR     IMPLEMENT_ISR(I2C_ISR)
+    #define SET_PRIO_HIGH_I2C_ISR do{PI2C=1;}while(0)
+    #define SET_PRIO_LOW_I2C_ISR  do{PI2C=0;}while(0)
+    #define ENABLE_I2C_ISR        do{EI2C=1;}while(0)
+    #define DISABLE_I2C_ISR       do{EI2C=0;}while(0)
+    #define ACK_I2C_ISR           ATOMIC_AND(EXIF,~BIT5)
+#endif
+
+#ifdef USE_INT4AV
+    #define SETUP_INT4AV         do{INTSETUP|=BIT0|BIT1;}while(0)
+    #define SET_PRIO_HIGH_INT4AV do{PX4=1;}while(0)
+    #define SET_PRIO_LOW_INT4AV  do{PX4=0;}while(0)
+    #define ENABLE_INT4AV        do{EX4=1;}while(0)
+    #define DISABLE_INT4AV       do{EX4=0;}while(0)
+    #define ACK_INT4AV_ANY       do{ATOMIC_AND(EXIF,~BIT6);INT4CLR=0;}while(0)
+    #define ACK_INT4AV(reg,bit)  do{ATOMIC_AND(EXIF,~BIT6);reg=bit;}while(0)
+//    #define ACK_INT4AV(reg,bit)  ACK_INT4AV_ANY
 #endif
 
 #ifdef USE_INT4_ISR
     DECLARE_ISR(INT4_ISR);
-    #define IMPLEMENT_INT4_ISR IMPLEMENT_ISR(INT4_ISR)
-    #define ENABLE_INT4_ISR  do{EX4=1;}while(0)
-    #define DISABLE_INT4_ISR do{EX4=0;}while(0)
-    #define ACK_INT4_ISR     do{EXIF&=~BIT6;}while(0)
+    #define IMPLEMENT_INT4_ISR     IMPLEMENT_ISR(INT4_ISR)
+    #define SET_PRIO_HIGH_INT4_ISR do{PX4=1;}while(0)
+    #define SET_PRIO_LOW_INT4_ISR  do{PX4=0;}while(0)
+    #define ENABLE_INT4_ISR        do{EX4=1;}while(0)
+    #define DISABLE_INT4_ISR       do{EX4=0;}while(0)
+    #define ACK_INT4_ISR           ATOMIC_AND(EXIF,~BIT6)
 #endif
 
 #ifdef USE_INT5_ISR
     DECLARE_ISR(INT5_ISR);
-    #define IMPLEMENT_INT5_ISR IMPLEMENT_ISR(INT5_ISR)
-    #define ENABLE_INT5_ISR  do{EX5=1;}while(0)
-    #define DISABLE_INT5_ISR do{EX5=0;}while(0)
-    #define ACK_INT5_ISR     do{EXIF&=~BIT7;}while(0)
+    #define IMPLEMENT_INT5_ISR     IMPLEMENT_ISR(INT5_ISR)
+    #define SET_PRIO_HIGH_INT5_ISR do{PX5=1;}while(0)
+    #define SET_PRIO_LOW_INT5_ISR  do{PX5=0;}while(0)
+    #define ENABLE_INT5_ISR        do{EX5=1;}while(0)
+    #define DISABLE_INT5_ISR       do{EX5=0;}while(0)
+    #define ACK_INT5_ISR           ATOMIC_AND(EXIF,~BIT7)
 #endif
 
 #ifdef USE_INT6_ISR
     DECLARE_ISR(INT6_ISR);
-    #define IMPLEMENT_INT6_ISR IMPLEMENT_ISR(INT6_ISR)
-    #define ENABLE_INT6_ISR  do{EX6=1;}while(0)
-    #define DISABLE_INT6_ISR do{EX6=0;}while(0)
-    #define ACK_INT6_ISR     do{INT6=0;}while(0)
+    #define IMPLEMENT_INT6_ISR     IMPLEMENT_ISR(INT6_ISR)
+    #define SET_PRIO_HIGH_INT6_ISR do{PX6=1;}while(0)
+    #define SET_PRIO_LOW_INT6_ISR  do{PX6=0;}while(0)
+    #define ENABLE_INT6_ISR        do{EX6=1;}while(0)
+    #define DISABLE_INT6_ISR       do{EX6=0;}while(0)
+    #define ACK_INT6_ISR           do{INT6=0;}while(0)
 #endif
 
 #ifdef USE_SUDAV_ISR
@@ -545,7 +585,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_SUDAV_ISR IMPLEMENT_ISR(SUDAV_ISR)
     #define ENABLE_SUDAV_ISR  do{USBIE|= BIT0;}while(0)
     #define DISABLE_SUDAV_ISR do{USBIE&=~BIT0;}while(0)
-    #define ACK_SUDAV_ISR     do{EXIF&=~BIT4;USBIRQ=BIT0;}while(0)
+    #define ACK_SUDAV_ISR     ACK_INT2AV(USBIRQ,BIT0)
 #endif
 
 #ifdef USE_SOF_ISR
@@ -553,7 +593,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_SOF_ISR IMPLEMENT_ISR(SOF_ISR)
     #define ENABLE_SOF_ISR  do{USBIE|= BIT1;}while(0)
     #define DISABLE_SOF_ISR do{USBIE&=~BIT1;}while(0)
-    #define ACK_SOF_ISR     do{EXIF&=~BIT4;USBIRQ=BIT1;}while(0)
+    #define ACK_SOF_ISR     ACK_INT2AV(USBIRQ,BIT1)
 #endif
 
 #ifdef USE_SUTOK_ISR
@@ -561,7 +601,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_SUTOK_ISR IMPLEMENT_ISR(SUTOK_ISR)
     #define ENABLE_SUTOK_ISR  do{USBIE|= BIT2;}while(0)
     #define DISABLE_SUTOK_ISR do{USBIE&=~BIT2;}while(0)
-    #define ACK_SUTOK_ISR     do{EXIF&=~BIT4;USBIRQ=BIT2;}while(0)
+    #define ACK_SUTOK_ISR     ACK_INT2AV(USBIRQ,BIT2)
 #endif
 
 #ifdef USE_SUSPEND_ISR
@@ -569,7 +609,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_SUSPEND_ISR IMPLEMENT_ISR(SUSPEND_ISR)
     #define ENABLE_SUSPEND_ISR  do{USBIE|= BIT3;}while(0)
     #define DISABLE_SUSPEND_ISR do{USBIE&=~BIT3;}while(0)
-    #define ACK_SUSPEND_ISR     do{EXIF&=~BIT4;USBIRQ=BIT3;}while(0)
+    #define ACK_SUSPEND_ISR     ACK_INT2AV(USBIRQ,BIT3)
 #endif
 
 #ifdef USE_USBRESET_ISR
@@ -577,7 +617,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_USBRESET_ISR IMPLEMENT_ISR(USBRESET_ISR)
     #define ENABLE_USBRESET_ISR  do{USBIE|= BIT4;}while(0)
     #define DISABLE_USBRESET_ISR do{USBIE&=~BIT4;}while(0)
-    #define ACK_USBRESET_ISR     do{EXIF&=~BIT4;USBIRQ=BIT4;}while(0)
+    #define ACK_USBRESET_ISR     ACK_INT2AV(USBIRQ,BIT4)
 #endif
 
 #ifdef USE_HISPEED_ISR
@@ -585,7 +625,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_HISPEED_ISR IMPLEMENT_ISR(HISPEED_ISR)
     #define ENABLE_HISPEED_ISR  do{USBIE|= BIT5;}while(0)
     #define DISABLE_HISPEED_ISR do{USBIE&=~BIT5;}while(0)
-    #define ACK_HISPEED_ISR     do{EXIF&=~BIT4;USBIRQ=BIT5;}while(0)
+    #define ACK_HISPEED_ISR     ACK_INT2AV(USBIRQ,BIT5)
 #endif
 
 #ifdef USE_EP0ACK_ISR
@@ -593,7 +633,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP0ACK_ISR IMPLEMENT_ISR(EP0ACK_ISR)
     #define ENABLE_EP0ACK_ISR  do{USBIE|= BIT6;}while(0)
     #define DISABLE_EP0ACK_ISR do{USBIE&=~BIT6;}while(0)
-    #define ACK_EP0ACK_ISR     do{EXIF&=~BIT4;USBIRQ=BIT6;}while(0)
+    #define ACK_EP0ACK_ISR     ACK_INT2AV(USBIRQ,BIT6)
 #endif
 
 #ifdef USE_EP0IN_ISR
@@ -601,7 +641,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP0IN_ISR IMPLEMENT_ISR(EP0IN_ISR)
     #define ENABLE_EP0IN_ISR  do{EPIE|= BIT0;}while(0)
     #define DISABLE_EP0IN_ISR do{EPIE&=~BIT0;}while(0)
-    #define ACK_EP0IN_ISR     do{EXIF&=~BIT4;EPIRQ=BIT0;}while(0)
+    #define ACK_EP0IN_ISR     ACK_INT2AV(EPIRQ,BIT0)
 #endif
 
 #ifdef USE_EP0OUT_ISR
@@ -609,7 +649,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP0OUT_ISR IMPLEMENT_ISR(EP0OUT_ISR)
     #define ENABLE_EP0OUT_ISR  do{EPIE|= BIT1;}while(0)
     #define DISABLE_EP0OUT_ISR do{EPIE&=~BIT1;}while(0)
-    #define ACK_EP0OUT_ISR     do{EXIF&=~BIT4;EPIRQ=BIT1;}while(0)
+    #define ACK_EP0OUT_ISR     ACK_INT2AV(EPIRQ,BIT1)
 #endif
 
 #ifdef USE_EP1IN_ISR
@@ -617,7 +657,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP1IN_ISR IMPLEMENT_ISR(EP1IN_ISR)
     #define ENABLE_EP1IN_ISR  do{EPIE|= BIT2;}while(0)
     #define DISABLE_EP1IN_ISR do{EPIE&=~BIT2;}while(0)
-    #define ACK_EP1IN_ISR     do{EXIF&=~BIT4;EPIRQ=BIT2;}while(0)
+    #define ACK_EP1IN_ISR     ACK_INT2AV(EPIRQ,BIT2)
 #endif
 
 #ifdef USE_EP1OUT_ISR
@@ -625,7 +665,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP1OUT_ISR IMPLEMENT_ISR(EP1OUT_ISR)
     #define ENABLE_EP1OUT_ISR  do{EPIE|= BIT3;}while(0)
     #define DISABLE_EP1OUT_ISR do{EPIE&=~BIT3;}while(0)
-    #define ACK_EP1OUT_ISR     do{EXIF&=~BIT4;EPIRQ=BIT3;}while(0)
+    #define ACK_EP1OUT_ISR     ACK_INT2AV(EPIRQ,BIT3)
 #endif
 
 #ifdef USE_EP2_ISR
@@ -633,7 +673,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2_ISR IMPLEMENT_ISR(EP2_ISR)
     #define ENABLE_EP2_ISR  do{EPIE|= BIT4;}while(0)
     #define DISABLE_EP2_ISR do{EPIE&=~BIT4;}while(0)
-    #define ACK_EP2_ISR     do{EXIF&=~BIT4;EPIRQ=BIT4;}while(0)
+    #define ACK_EP2_ISR     ACK_INT2AV(EPIRQ,BIT4)
 #endif
 
 #ifdef USE_EP4_ISR
@@ -641,7 +681,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4_ISR IMPLEMENT_ISR(EP4_ISR)
     #define ENABLE_EP4_ISR  do{EPIE|= BIT5;}while(0)
     #define DISABLE_EP4_ISR do{EPIE&=~BIT5;}while(0)
-    #define ACK_EP4_ISR     do{EXIF&=~BIT4;EPIRQ=BIT5;}while(0)
+    #define ACK_EP4_ISR     ACK_INT2AV(EPIRQ,BIT5)
 #endif
 
 #ifdef USE_EP6_ISR
@@ -649,7 +689,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6_ISR IMPLEMENT_ISR(EP6_ISR)
     #define ENABLE_EP6_ISR  do{EPIE|= BIT6;}while(0)
     #define DISABLE_EP6_ISR do{EPIE&=~BIT6;}while(0)
-    #define ACK_EP6_ISR     do{EXIF&=~BIT4;EPIRQ=BIT6;}while(0)
+    #define ACK_EP6_ISR     ACK_INT2AV(EPIRQ,BIT6)
 #endif
 
 #ifdef USE_EP8_ISR
@@ -657,7 +697,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8_ISR IMPLEMENT_ISR(EP8_ISR)
     #define ENABLE_EP8_ISR  do{EPIE|= BIT7;}while(0)
     #define DISABLE_EP8_ISR do{EPIE&=~BIT7;}while(0)
-    #define ACK_EP8_ISR     do{EXIF&=~BIT4;EPIRQ=BIT7;}while(0)
+    #define ACK_EP8_ISR     ACK_INT2AV(EPIRQ,BIT7)
 #endif
 
 #ifdef USE_IBN_ISR
@@ -665,7 +705,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_IBN_ISR IMPLEMENT_ISR(IBN_ISR)
     #define ENABLE_IBN_ISR  do{NAKIE|= BIT0;}while(0)
     #define DISABLE_IBN_ISR do{NAKIE&=~BIT0;}while(0)
-    #define ACK_IBN_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT0;}while(0)
+    #define ACK_IBN_ISR     ACK_INT2AV(NAKIRQ,BIT0)
 #endif
 
 #ifdef USE_EP0PING_ISR
@@ -673,7 +713,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP0PING_ISR IMPLEMENT_ISR(EP0PING_ISR)
     #define ENABLE_EP0PING_ISR  do{NAKIE|= BIT2;}while(0)
     #define DISABLE_EP0PING_ISR do{NAKIE&=~BIT2;}while(0)
-    #define ACK_EP0PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT2;}while(0)
+    #define ACK_EP0PING_ISR     ACK_INT2AV(NAKIRQ,BIT2)
 #endif
 
 #ifdef USE_EP1PING_ISR
@@ -681,7 +721,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP1PING_ISR IMPLEMENT_ISR(EP1PING_ISR)
     #define ENABLE_EP1PING_ISR  do{NAKIE|= BIT3;}while(0)
     #define DISABLE_EP1PING_ISR do{NAKIE&=~BIT3;}while(0)
-    #define ACK_EP1PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT3;}while(0)
+    #define ACK_EP1PING_ISR     ACK_INT2AV(NAKIRQ,BIT3)
 #endif
 
 #ifdef USE_EP2PING_ISR
@@ -689,7 +729,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2PING_ISR IMPLEMENT_ISR(EP2PING_ISR)
     #define ENABLE_EP2PING_ISR  do{NAKIE|= BIT4;}while(0)
     #define DISABLE_EP2PING_ISR do{NAKIE&=~BIT4;}while(0)
-    #define ACK_EP2PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT4;}while(0)
+    #define ACK_EP2PING_ISR     ACK_INT2AV(NAKIRQ,BIT4)
 #endif
 
 #ifdef USE_EP4PING_ISR
@@ -697,7 +737,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4PING_ISR IMPLEMENT_ISR(EP4PING_ISR)
     #define ENABLE_EP4PING_ISR  do{NAKIE|= BIT5;}while(0)
     #define DISABLE_EP4PING_ISR do{NAKIE&=~BIT5;}while(0)
-    #define ACK_EP4PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT5;}while(0)
+    #define ACK_EP4PING_ISR     ACK_INT2AV(NAKIRQ,BIT5)
 #endif
 
 #ifdef USE_EP6PING_ISR
@@ -705,7 +745,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6PING_ISR IMPLEMENT_ISR(EP6PING_ISR)
     #define ENABLE_EP6PING_ISR  do{NAKIE|= BIT6;}while(0)
     #define DISABLE_EP6PING_ISR do{NAKIE&=~BIT6;}while(0)
-    #define ACK_EP6PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT6;}while(0)
+    #define ACK_EP6PING_ISR     ACK_INT2AV(NAKIRQ,BIT6)
 #endif
 
 #ifdef USE_EP8PING_ISR
@@ -713,7 +753,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8PING_ISR IMPLEMENT_ISR(EP8PING_ISR)
     #define ENABLE_EP8PING_ISR  do{NAKIE|= BIT7;}while(0)
     #define DISABLE_EP8PING_ISR do{NAKIE&=~BIT7;}while(0)
-    #define ACK_EP8PING_ISR     do{EXIF&=~BIT4;NAKIRQ=BIT7;}while(0)
+    #define ACK_EP8PING_ISR     ACK_INT2AV(NAKIRQ,BIT7)
 #endif
 
 #ifdef USE_ERRLIMIT_ISR
@@ -721,7 +761,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_ERRLIMIT_ISR IMPLEMENT_ISR(ERRLIMIT_ISR)
     #define ENABLE_ERRLIMIT_ISR  do{USBERRIE|= BIT0;}while(0)
     #define DISABLE_ERRLIMIT_ISR do{USBERRIE&=~BIT0;}while(0)
-    #define ACK_ERRLIMIT_ISR     do{EXIF&=~BIT4;USBERRIRQ=BIT0;}while(0)
+    #define ACK_ERRLIMIT_ISR     ACK_INT2AV(USBERRIRQ,BIT0)
 #endif
 
 #ifdef USE_EP2ISOERR_ISR
@@ -729,7 +769,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2ISOERR_ISR IMPLEMENT_ISR(EP2ISOERR_ISR)
     #define ENABLE_EP2ISOERR_ISR  do{USBERRIE|= BIT4;}while(0)
     #define DISABLE_EP2ISOERR_ISR do{USBERRIE&=~BIT4;}while(0)
-    #define ACK_EP2ISOERR_ISR     do{EXIF&=~BIT4;USBERRIRQ=BIT4;}while(0)
+    #define ACK_EP2ISOERR_ISR     ACK_INT2AV(USBERRIRQ,BIT4)
 #endif
 
 #ifdef USE_EP4ISOERR_ISR
@@ -737,7 +777,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4ISOERR_ISR IMPLEMENT_ISR(EP4ISOERR_ISR)
     #define ENABLE_EP4ISOERR_ISR  do{USBERRIE|= BIT5;}while(0)
     #define DISABLE_EP4ISOERR_ISR do{USBERRIE&=~BIT5;}while(0)
-    #define ACK_EP4ISOERR_ISR     do{EXIF&=~BIT4;USBERRIRQ=BIT5;}while(0)
+    #define ACK_EP4ISOERR_ISR     ACK_INT2AV(USBERRIRQ,BIT5)
 #endif
 
 #ifdef USE_EP6ISOERR_ISR
@@ -745,7 +785,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6ISOERR_ISR IMPLEMENT_ISR(EP6ISOERR_ISR)
     #define ENABLE_EP6ISOERR_ISR  do{USBERRIE|= BIT6;}while(0)
     #define DISABLE_EP6ISOERR_ISR do{USBERRIE&=~BIT6;}while(0)
-    #define ACK_EP6ISOERR_ISR     do{EXIF&=~BIT4;USBERRIRQ=BIT6;}while(0)
+    #define ACK_EP6ISOERR_ISR     ACK_INT2AV(USBERRIRQ,BIT6)
 #endif
 
 #ifdef USE_EP8ISOERR_ISR
@@ -753,7 +793,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8ISOERR_ISR IMPLEMENT_ISR(EP8ISOERR_ISR)
     #define ENABLE_EP8ISOERR_ISR  do{USBERRIE|= BIT7;}while(0)
     #define DISABLE_EP8ISOERR_ISR do{USBERRIE&=~BIT7;}while(0)
-    #define ACK_EP8ISOERR_ISR     do{EXIF&=~BIT4;USBERRIRQ=BIT7;}while(0)
+    #define ACK_EP8ISOERR_ISR     ACK_INT2AV(USBERRIRQ,BIT7)
 #endif
 
 #ifdef USE_EP2PF_ISR
@@ -761,7 +801,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2PF_ISR IMPLEMENT_ISR(EP2PF_ISR)
     #define ENABLE_EP2PF_ISR  do{EP2FIFOIE|= BIT2;}while(0)
     #define DISABLE_EP2PF_ISR do{EP2FIFOIE&=~BIT2;}while(0)
-    #define ACK_EP2PF_ISR     do{EXIF&=~BIT6;EP2FIFOIRQ=BIT2;}while(0)
+    #define ACK_EP2PF_ISR     ACK_INT4AV(EP2FIFOIRQ,BIT2)
 #endif
 
 #ifdef USE_EP4PF_ISR
@@ -769,7 +809,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4PF_ISR IMPLEMENT_ISR(EP4PF_ISR)
     #define ENABLE_EP4PF_ISR  do{EP4FIFOIE|= BIT2;}while(0)
     #define DISABLE_EP4PF_ISR do{EP4FIFOIE&=~BIT2;}while(0)
-    #define ACK_EP4PF_ISR     do{EXIF&=~BIT6;EP4FIFOIRQ=BIT2;}while(0)
+    #define ACK_EP4PF_ISR     ACK_INT4AV(EP4FIFOIRQ,BIT2)
 #endif
 
 #ifdef USE_EP6PF_ISR
@@ -777,7 +817,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6PF_ISR IMPLEMENT_ISR(EP6PF_ISR)
     #define ENABLE_EP6PF_ISR  do{EP6FIFOIE|= BIT2;}while(0)
     #define DISABLE_EP6PF_ISR do{EP6FIFOIE&=~BIT2;}while(0)
-    #define ACK_EP6PF_ISR     do{EXIF&=~BIT6;EP6FIFOIRQ=BIT2;}while(0)
+    #define ACK_EP6PF_ISR     ACK_INT4AV(EP6FIFOIRQ,BIT2)
 #endif
 
 #ifdef USE_EP8PF_ISR
@@ -785,7 +825,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8PF_ISR IMPLEMENT_ISR(EP8PF_ISR)
     #define ENABLE_EP8PF_ISR  do{EP8FIFOIE|= BIT2;}while(0)
     #define DISABLE_EP8PF_ISR do{EP8FIFOIE&=~BIT2;}while(0)
-    #define ACK_EP8PF_ISR     do{EXIF&=~BIT6;EP8FIFOIRQ=BIT2;}while(0)
+    #define ACK_EP8PF_ISR     ACK_INT4AV(EP8FIFOIRQ,BIT2)
 #endif
 
 #ifdef USE_EP2EF_ISR
@@ -793,7 +833,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2EF_ISR IMPLEMENT_ISR(EP2EF_ISR)
     #define ENABLE_EP2EF_ISR  do{EP2FIFOIE|= BIT1;}while(0)
     #define DISABLE_EP2EF_ISR do{EP2FIFOIE&=~BIT1;}while(0)
-    #define ACK_EP2EF_ISR     do{EXIF&=~BIT6;EP2FIFOIRQ=BIT1;}while(0)
+    #define ACK_EP2EF_ISR     ACK_INT4AV(EP2FIFOIRQ,BIT1)
 #endif
 
 #ifdef USE_EP4EF_ISR
@@ -801,7 +841,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4EF_ISR IMPLEMENT_ISR(EP4EF_ISR)
     #define ENABLE_EP4EF_ISR  do{EP4FIFOIE|= BIT1;}while(0)
     #define DISABLE_EP4EF_ISR do{EP4FIFOIE&=~BIT1;}while(0)
-    #define ACK_EP4EF_ISR     do{EXIF&=~BIT6;EP4FIFOIRQ=BIT1;}while(0)
+    #define ACK_EP4EF_ISR     ACK_INT4AV(EP4FIFOIRQ,BIT1)
 #endif
 
 #ifdef USE_EP6EF_ISR
@@ -809,7 +849,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6EF_ISR IMPLEMENT_ISR(EP6EF_ISR)
     #define ENABLE_EP6EF_ISR  do{EP6FIFOIE|= BIT1;}while(0)
     #define DISABLE_EP6EF_ISR do{EP6FIFOIE&=~BIT1;}while(0)
-    #define ACK_EP6EF_ISR     do{EXIF&=~BIT6;EP6FIFOIRQ=BIT1;}while(0)
+    #define ACK_EP6EF_ISR     ACK_INT4AV(EP6FIFOIRQ,BIT1)
 #endif
 
 #ifdef USE_EP8EF_ISR
@@ -817,7 +857,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8EF_ISR IMPLEMENT_ISR(EP8EF_ISR)
     #define ENABLE_EP8EF_ISR  do{EP8FIFOIE|= BIT1;}while(0)
     #define DISABLE_EP8EF_ISR do{EP8FIFOIE&=~BIT1;}while(0)
-    #define ACK_EP8EF_ISR     do{EXIF&=~BIT6;EP8FIFOIRQ=BIT1;}while(0)
+    #define ACK_EP8EF_ISR     ACK_INT4AV(EP8FIFOIRQ,BIT1)
 #endif
 
 #ifdef USE_EP2FF_ISR
@@ -825,7 +865,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP2FF_ISR IMPLEMENT_ISR(EP2FF_ISR)
     #define ENABLE_EP2FF_ISR  do{EP2FIFOIE|= BIT0;}while(0)
     #define DISABLE_EP2FF_ISR do{EP2FIFOIE&=~BIT0;}while(0)
-    #define ACK_EP2FF_ISR     do{EXIF&=~BIT6;EP2FIFOIRQ=BIT0;}while(0)
+    #define ACK_EP2FF_ISR     ACK_INT4AV(EP2FIFOIRQ,BIT0)
 #endif
 
 #ifdef USE_EP4FF_ISR
@@ -833,7 +873,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP4FF_ISR IMPLEMENT_ISR(EP4FF_ISR)
     #define ENABLE_EP4FF_ISR  do{EP4FIFOIE|= BIT0;}while(0)
     #define DISABLE_EP4FF_ISR do{EP4FIFOIE&=~BIT0;}while(0)
-    #define ACK_EP4FF_ISR     do{EXIF&=~BIT6;EP4FIFOIRQ=BIT0;}while(0)
+    #define ACK_EP4FF_ISR     ACK_INT4AV(EP4FIFOIRQ,BIT0)
 #endif
 
 #ifdef USE_EP6FF_ISR
@@ -841,7 +881,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP6FF_ISR IMPLEMENT_ISR(EP6FF_ISR)
     #define ENABLE_EP6FF_ISR  do{EP6FIFOIE|= BIT0;}while(0)
     #define DISABLE_EP6FF_ISR do{EP6FIFOIE&=~BIT0;}while(0)
-    #define ACK_EP6FF_ISR     do{EXIF&=~BIT6;EP6FIFOIRQ=BIT0;}while(0)
+    #define ACK_EP6FF_ISR     ACK_INT4AV(EP6FIFOIRQ,BIT0)
 #endif
 
 #ifdef USE_EP8FF_ISR
@@ -849,7 +889,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_EP8FF_ISR IMPLEMENT_ISR(EP8FF_ISR)
     #define ENABLE_EP8FF_ISR  do{EP8FIFOIE|= BIT0;}while(0)
     #define DISABLE_EP8FF_ISR do{EP8FIFOIE&=~BIT0;}while(0)
-    #define ACK_EP8FF_ISR     do{EXIF&=~BIT6;EP8FIFOIRQ=BIT0;}while(0)
+    #define ACK_EP8FF_ISR     ACK_INT4AV(EP8FIFOIRQ,BIT0)
 #endif
 
 #ifdef USE_GPIFDONE_ISR
@@ -857,7 +897,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_GPIFDONE_ISR IMPLEMENT_ISR(GPIFDONE_ISR)
     #define ENABLE_GPIFDONE_ISR  do{GPIFIE|= BIT0;}while(0)
     #define DISABLE_GPIFDONE_ISR do{GPIFIE&=~BIT0;}while(0)
-    #define ACK_GPIFDONE_ISR     do{EXIF&=~BIT6;GPIFIRQ=BIT0;}while(0)
+    #define ACK_GPIFDONE_ISR     ACK_INT4AV(GPIFIRQ,BIT0)
 #endif
 
 #ifdef USE_GPIFWF_ISR
@@ -865,7 +905,7 @@ DECLARE_XSFR_ARRAY(EP8FIFOBUF,0xfc00,1024);
     #define IMPLEMENT_GPIFWF_ISR IMPLEMENT_ISR(GPIFWF_ISR)
     #define ENABLE_GPIFWF_ISR  do{GPIFIE|= BIT1;}while(0)
     #define DISABLE_GPIFWF_ISR do{GPIFIE&=~BIT1;}while(0)
-    #define ACK_GPIFWF_ISR     do{EXIF&=~BIT6;GPIFIRQ=BIT1;}while(0)
+    #define ACK_GPIFWF_ISR     ACK_INT4AV(GPIFIRQ,BIT1)
 #endif
 
 #endif

@@ -389,22 +389,22 @@ IVT_START
             #endif
 
             // 0x74
-            #ifdef USE_EP2ISOERR_ISR
-                IVT2_ISR(EP2ISOERR_ISR)
+            #ifdef USE_EP4ISOERR_ISR
+                IVT2_ISR(EP4ISOERR_ISR)
             #else
                 IVT2_NOISR
             #endif
 
             // 0x78
-            #ifdef USE_EP2ISOERR_ISR
-                IVT2_ISR(EP2ISOERR_ISR)
+            #ifdef USE_EP6ISOERR_ISR
+                IVT2_ISR(EP6ISOERR_ISR)
             #else
                 IVT2_NOISR
             #endif
 
             // 0x7c
-            #ifdef USE_EP2ISOERR_ISR
-                IVT2_ISR(EP2ISOERR_ISR)
+            #ifdef USE_EP8ISOERR_ISR
+                IVT2_ISR(EP8ISOERR_ISR)
             #else
                 IVT2_NOISR
             #endif
