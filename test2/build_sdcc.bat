@@ -1,7 +1,7 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 
-set BUILD_DIR=build
+set BUILD_DIR=build_sdcc
 set APP_NAME=test
 set CC=sdcc -c
 set CC_FLAGS=-mmcs51 --opt-code-speed --fomit-frame-pointer --model-small --code-size 0x4000 --iram-size 0x0100 --stack-size 0x0080 --xram-size 0x0000
