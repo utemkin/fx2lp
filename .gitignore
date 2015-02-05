@@ -14,5 +14,6 @@
 *.kpf
 *.swp
 *.iic
+*.lk
 docs/html
 build
