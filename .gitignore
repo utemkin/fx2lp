@@ -15,5 +15,7 @@
 *.swp
 *.iic
 *.lk
+*.i
+*.obj
 docs/html
 build

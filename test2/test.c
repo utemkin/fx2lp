@@ -500,10 +500,10 @@
     }
 #endif
 
-void putchar(char c)
-{
-    c=c;
-}
+//void putchar(char c)
+//{
+//    c=c;
+//}
 
 void main()
 {
@@ -518,12 +518,11 @@ void main()
     SET_PRIO_LOW_INT4AV;
 #endif
 
-    ATOMIC_INC(IOA);
-    ATOMIC_DEC(IOB);
-    ATOMIC_AND(IOC,12);
-    ATOMIC_OR(IOD,13);
-    ATOMIC_XOR(IOE,14);
+//    ATOMIC_INC(IOA);
+//    ATOMIC_DEC(IOB);
+//    ATOMIC_AND(IOC,12);
+//    ATOMIC_OR(IOD,13);
+//    ATOMIC_XOR(IOE,14);
 
-    IOA=1;
-    printf("This is test\n");
+//    printf("This is test\n");
 }
