@@ -544,11 +544,9 @@ void main()
     SET_PRIO_LOW_INT4AV;
 #endif
 
-//    ATOMIC_INC(IOA);
-//    ATOMIC_DEC(IOB);
-//    ATOMIC_AND(IOC,12);
-//    ATOMIC_OR(IOD,13);
-//    ATOMIC_XOR(IOE,14);
+    atomic();
+    test_and_clear();
+    my_data=my_code;
 
 //    printf("This is test\n");
 }

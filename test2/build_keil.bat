@@ -39,5 +39,7 @@ for %%f in (%ASM_SOURCES%) do (
   if exist !OBJ! del /q !OBJ!
   %AS% %%f "OBJECT(!OBJ!)" "PRINT(%BUILD_DIR%\%%~nf.lst)" %AS_FLAGS%
 )
+if exist "%BUILD_DIR%\%APP_NAME%.exe" del /q "%BUILD_DIR%\%APP_NAME%.exe"
+if exist "%BUILD_DIR%\%APP_NAME%.hex" del /q "%BUILD_DIR%\%APP_NAME%.hex"
   rem , "%KEIL%\Lib\C51S.LIB"
-%LD% %OBJS% TO "%BUILD_DIR%\%APP_NAME%" "PRINT(%BUILD_DIR%\%APP_NAME%.map)" %LD_FLAGS% && "%KEIL%\bin\OH51.EXE" "%BUILD_DIR%\%APP_NAME%"
+%LD% %OBJS% TO "%BUILD_DIR%\%APP_NAME%.exe" "PRINT(%BUILD_DIR%\%APP_NAME%.map)" %LD_FLAGS% && "%KEIL%\bin\OH51.EXE" "%BUILD_DIR%\%APP_NAME%.exe" HEXFILE("%BUILD_DIR%\%APP_NAME%.hex")

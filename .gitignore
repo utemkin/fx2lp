@@ -17,5 +17,6 @@
 *.lk
 *.i
 *.obj
+*.exe
 docs/html
 build

@@ -20,4 +20,5 @@ for %%f in (%SOURCES%) do (
   if exist !OBJ! del /q !OBJ!
   %CC% %CC_FLAGS% %%f -o !OBJ!
 )
+if exist "%BUILD_DIR%\%APP_NAME%.hex" del /q "%BUILD_DIR%\%APP_NAME%.hex"
 %LD% %LD_FLAGS% %OBJS% -o "%BUILD_DIR%\%APP_NAME%.hex"
