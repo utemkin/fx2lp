@@ -10,7 +10,7 @@
 #define USE_WAKEUP_ISR
 #define USE_USART1_ISR
 #define USE_I2C_ISR
-#define USE_INT4_ISR
+//#define USE_INT4_ISR
 #define USE_INT5_ISR
 #define USE_INT6_ISR
 
@@ -44,7 +44,7 @@
 #define USE_EP8ISOERR_ISR
 */
 
-/*
+///*
 #define USE_EP2PF_ISR
 #define USE_EP4PF_ISR
 #define USE_EP6PF_ISR
@@ -59,6 +59,6 @@
 #define USE_EP8FF_ISR
 #define USE_GPIFDONE_ISR
 #define USE_GPIFWF_ISR
-*/
+//*/
 
 #endif

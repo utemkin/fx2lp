@@ -134,14 +134,51 @@ IVT_START       MACRO
 IVT_ISR         MACRO    _name
                 EXTRN CODE _name
                 LJMP     _name
+                DS       5
                 ENDM
 IVT_AV4         MACRO
+                LJMP     ivect_table4
+                DS       5
                 ENDM
 IVT_AV2         MACRO
+                LJMP     ivect_table2
+                DS       5
                 ENDM
 IVT_NOISR       MACRO
+                RETI
+                DS       7
                 ENDM
 IVT_END         MACRO
+                ENDM
+IVT4_START      MACRO
+                CSEG    AT      00080H
+ivect_table4:
+                ENDM
+IVT4_ISR        MACRO    _name
+                EXTRN CODE _name
+                LJMP     _name
+                DS       1
+                ENDM
+IVT4_NOISR      MACRO
+                RETI
+                DS       3
+                ENDM
+IVT4_END        MACRO
+                ENDM
+IVT2_START      MACRO
+                CSEG    AT      00100H
+ivect_table2:
+                ENDM
+IVT2_ISR        MACRO    _name
+                EXTRN CODE _name
+                LJMP     _name
+                DS       1
+                ENDM
+IVT2_NOISR      MACRO
+                RETI
+                DS       3
+                ENDM
+IVT2_END        MACRO
                 ENDM
 
 #include "ivect.c"

@@ -1,6 +1,32 @@
 #include "fx2lp.h"
 #include <stdio.h>
 
+BIT my_bit;
+BYTE my_byte;
+WORD my_word;
+DWORD my_dword;
+
+DATA BYTE my_data;
+//XDATA BYTE my_xdata;
+IDATA BYTE my_idata;
+PDATA BYTE my_pdata;
+CODE BYTE my_code=1;
+
+void atomic()
+{
+    ATOMIC_INC(IOA);
+    ATOMIC_DEC(IOA);
+    ATOMIC_AND(IOA,~0x80);
+    ATOMIC_OR(IOA,0x80);
+    ATOMIC_XOR(IOA,1);
+    NOP;
+}
+
+BIT test_and_clear()
+{
+    return ATOMIC_TEST_AND_CLEAR(PA1);
+}
+
 #ifdef USE_INT0_ISR
     IMPLEMENT_INT0_ISR
     {
